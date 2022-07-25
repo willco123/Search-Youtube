@@ -9,7 +9,7 @@ The .env file should be edited to account for your MYSQL details, this includes 
 The default endpoints are listed below and can be called through postman:
 
 ## localhost:3003/search
-Calling a get request to this endpoint will search the Global Cycling Network and Global Mountain Bike Network youtube channels for the items in the search_filter file and store the titles and publishedAt dates in the database.
+Calling a get request to this endpoint will search the Global Cycling Network and Global Mountain Bike Network youtube channels for the search items in the "search_filter" file, then store the titles and publishedAt dates will be stored in the database.
 
 ## localhost:3003/videos
 Calling a get request to this endpoint will retrieve all the videos in the database.
