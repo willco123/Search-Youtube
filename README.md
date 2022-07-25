@@ -8,7 +8,7 @@ The .env file should be edited to account for your MYSQL details, this includes 
 
 The default endpoints are listed below and can be called through postman
 
-localhost:3003/search
+localhost:3003/search \n
 Calling a get request to this endpoint will search the Global Cycling Network and Global Mountain Bike Network youtube channels for the items in the search_filter file and store the titles and publishedAt dates in the database.
 
 localhost:3003/videos
@@ -21,7 +21,4 @@ localhost:3003/searchDB/?column=value
 Calling a get request to this endpoint will search and return a record that matches the given parameters, only single column/value pairs are permitted.
 
 For example localhost:3003/searchDB/title=dubai will return all records with “dubai” in the title, localhost:3003/searchDB/date=2016 will return all records containing the year 2016.
-
-TODO:
-Remove duplicate entries
 
