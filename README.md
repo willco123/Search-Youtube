@@ -6,6 +6,8 @@ The rules state that no additional fields could be appended to the tables as suc
 
 The .env file should be edited to account for your MYSQL details, this includes user, password and host. The default values I used are included in this file. The program assumes the database name you will be using is “mydb”, if it is not please change the .sql file to accommodate for the new database name. The API key for Youtube data v3 can also be set in the .env file, along with the port connection.
 
+To establish the server run "node server" or "nodemon server"
+
 The default endpoints are listed below and can be called through postman:
 
 ## localhost:3003/search
@@ -23,4 +25,3 @@ Calling a get request to this endpoint will search and return a record that matc
 
 For example localhost:3003/searchDB/?title=dubai will return all records with “dubai” in the title, localhost:3003/searchDB/?date=2016 will return all records containing the year 2016.
 
-To establish the server run "node server" or "nodemon server"
