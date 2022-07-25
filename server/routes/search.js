@@ -5,11 +5,7 @@ const {google} = require('googleapis');
 const db = require('../startup/db');
 const fs = require('fs/promises');
 
-//AIzaSyB33X2C_XFne3o-Nni_s9AY7MqwsOu2LIc blankgands
-//AIzaSyCCoBszLLDbtz2oIawhGl8VcQnzpjDkTbs  Will.cowne
-//AIzaSyB6QXbiIPNNblf7oJFncStqWaVfk8KY198 mistergands
-//AIzaSyDjyab5MnfhaIn0nTqqb4i4zhA9f5I4ipo blankgands123@gmail.com
-//AIzaSyCcUDwWf_Jd6QJxq2pOK_HClghYNXPK6sU willosecond
+
 const apiKey = process.env.MYAPIKEY;
 const youtube = google.youtube({
   version: "v3",
