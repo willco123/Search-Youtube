@@ -1,52 +1,12 @@
 require('dotenv').config()
-const express = require('express');
-const router = express.Router();
-const {google} = require('googleapis');
-const db = require('../startup/db');
 const fs = require('fs/promises');
-
-//test2
-
+const {google} = require('googleapis');
 const apiKey = process.env.MYAPIKEY;
 const youtube = google.youtube({
   version: "v3",
   auth: apiKey,
 });
-var searchQuery = '';
-var searchParams = {
-  part: 'snippet',
-  q: searchQuery,
-  type: 'video',
-  maxResults: 50,
-  channelId: 'UCuTaETsuCOkJ0H_GAztWt0Q', //Global Cycling Network
-};
-
-//channelId: 'UC_A--fhX5gea0i4UtpD99Gg' //globalMTB
-
-router.get('/', async (req, res, next) => {
-  try{ 
-
-    searchArray = await GetSearchStrings();
-    for (let i in searchArray){
-      searchQuery = 'intitle:"' + searchArray[i] + '"';
-      searchParams.q = searchQuery;
-      await GetSearchResults(searchParams);
-    }
-
-    searchParams.channelId = 'UC_A--fhX5gea0i4UtpD99Gg';
-
-    for (let i in searchArray){
-      searchQuery = 'intitle:"' + searchArray[i] + '"';
-      searchParams.q = searchQuery;
-      await GetSearchResults(searchParams);
-    }
-
-    res.send('Items stored in DB!');
-
-  } catch (err){
-    next(err);
-  }
-})
+const db = require('../startup/db');
 
 async function StoreData(titlesPublishedAt){//Parses each page of data and stores entries one at a time
   for (let [key, val] of Object.entries(titlesPublishedAt)){
@@ -57,20 +17,7 @@ async function StoreData(titlesPublishedAt){//Parses each page of data and store
       console.log(err);
     }
   }
-}
-                  
-
-
-async function GetSearchStrings() {//Stores search params in array
-  try {
-    const dataStream = await fs.readFile('search_filter', { encoding: 'utf8' });
-    const searchArray = dataStream.split("\n");
-    return searchArray;
-  } catch (err) {
-    console.log(err);
-  }}
-
-
+}                
 
 async function GetSearchResults(searchParams){//Connect to youtube api and retrieves searched video titeles/dates and stores in DB
   var response = await youtube.search.list(searchParams);
@@ -105,5 +52,7 @@ async function GetSearchResults(searchParams){//Connect to youtube api and retri
   delete searchParams.pageToken;
 }
 
-
-module.exports = router;
+module.exports = {
+  StoreData,
+  GetSearchResults  
+}
