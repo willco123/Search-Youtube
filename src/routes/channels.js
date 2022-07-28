@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../startup/db');
+const db = require('../config/db');
 
 //Challenge mentions no use of the channel table, the rules mention not being able to add extra fields limits the
 //posibility to create a relationship between videos and channels

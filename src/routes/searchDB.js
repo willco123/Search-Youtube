@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../startup/db');
+const db = require('../config/db');
 
 router.get('/', async (req, res)=> {//query date or title
 

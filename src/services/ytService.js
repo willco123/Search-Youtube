@@ -1,12 +1,13 @@
 require('dotenv').config()
-const fs = require('fs/promises');
 const {google} = require('googleapis');
+
+const db = require('../config/db');
+
 const apiKey = process.env.MYAPIKEY;
 const youtube = google.youtube({
   version: "v3",
   auth: apiKey,
 });
-const db = require('../startup/db');
 
 async function StoreData(titlesPublishedAt){//Parses each page of data and stores entries one at a time
   for (let [key, val] of Object.entries(titlesPublishedAt)){
