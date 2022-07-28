@@ -1,9 +1,17 @@
 # Search Youtube
 ## API endpoint, using Node.js/MySQL/Express/YoutubeDataAPIV3
 
-The .env file should be edited to account for your MYSQL details, this includes user, password and host. The default values I used are included in this file. The program assumes the database name you will be using is “mydb”, if it is not please change the .sql file to accommodate for the new database name. The API key for Youtube data v3 can also be set in the .env file, along with the port connection.
+Add a .env file to the root of the project that contains:
+MYSQL_HOST='your db host'
+MYSQL_USER='your db username'
+MYSQL_PASSWORD='your db password'
+MYSQL_DATABASE='your db name'
+PORT='your port'
+MYAPIKEY='your Youtube Data Api V3 Key'
+NODE_ENV=development 
 
-To establish the server run "node server" or "nodemon server"
+
+To establish utilise nodemon or nodemon index
 
 The default endpoints are listed below and can be called through postman:
 
