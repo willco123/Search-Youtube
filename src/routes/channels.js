@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-//Challenge mentions no use of the channel table, the rules mention not being able to add extra fields limits the
-//posibility to create a relationship between videos and channels
-//Methods here are for potential future investigation
 
 router.get('/', async (req,res) => {//Get channels
     const [rows,fields] = await db.query("SELECT * from channels");

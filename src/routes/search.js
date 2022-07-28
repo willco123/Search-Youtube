@@ -9,6 +9,12 @@ const { searchParams, channelIDGCN, channelIDGMTB } = require('../models/searchM
 router.get('/', async (_req, res, next) => {
   try{ 
 
+    //further refactor
+
+    //ParseAndSearchChannels
+    //  ParseAndSearchItems
+    //"Business logic then completly isolated from route"
+    //Add in validation here aswell
     searchParams.channelId = channelIDGCN
     searchArray = await GetSearchStrings();
     for (let i in searchArray){

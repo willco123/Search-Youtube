@@ -1,7 +1,8 @@
 require('dotenv').config()
 const {google} = require('googleapis');
 
-const db = require('../config/db');
+
+const { StoreData } = require('../models/db'); 
 
 const apiKey = process.env.MYAPIKEY;
 const youtube = google.youtube({
@@ -9,16 +10,8 @@ const youtube = google.youtube({
   auth: apiKey,
 });
 
-async function StoreData(titlesPublishedAt){//Parses each page of data and stores entries one at a time
-  for (let [key, val] of Object.entries(titlesPublishedAt)){
-    try{
-    await db.query('INSERT INTO VIDEOS(title, date)\
-                      VALUES (?,?)', [key, val]);
-    } catch(err){
-      console.log(err);
-    }
-  }
-}                
+//How then to seperate logic from DB access here?
+        
 
 async function GetSearchResults(searchParams){//Connect to youtube api and retrieves searched video titeles/dates and stores in DB
   var response = await youtube.search.list(searchParams);
