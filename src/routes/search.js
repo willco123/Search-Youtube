@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { GetSearchResults } = require('../services/ytService');
-const { GetSearchStrings } =require('../services/miscService');
+const { GetSearchStrings } =require('../helpers/fileHelpers');
 const { searchParams, channelIDGCN, channelIDGMTB } = require('../models/searchModel');
 
 
