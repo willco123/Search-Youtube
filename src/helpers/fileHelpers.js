@@ -1,15 +1,14 @@
-const fs = require('fs/promises');
+const fs = require('fs');
 
-async function GetSearchStrings() {//Stores search params in array
+function ReadFileSync(inputFile) {//Stores search params in array
   try {
-    const dataStream = await fs.readFile('search_filter', { encoding: 'utf8' });
-    const searchArray = dataStream.split("\n");
-    return searchArray;
+    const data = fs.readFile(inputFile, { encoding: 'utf8' }).split("\r\n");
+    return data;
   } catch (err) {
     console.log(err);
   }
 }
 
 module.exports = {
-  GetSearchStrings,
+  ReadFileSync,
 }

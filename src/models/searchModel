@@ -1,17 +1,18 @@
-var searchQuery = ''
-const channelIDGCN = 'UCuTaETsuCOkJ0H_GAztWt0Q' //globalGCN
-const channelIDGMTB = 'UC_A--fhX5gea0i4UtpD99Gg' //globalMTB
-
+const { ReadFileSync } = require('../helpers/fileHelpers');
 
 var searchParams = {
   part: 'snippet',
   type: 'video',
-  q: searchQuery,
   maxResults: 50, 
 };
 
+
+const searchArray = await ReadFileSync('search_filter');
+const channelArray = await ReadFileSync('channel_filter');
+
+
 module.exports = {
   searchParams,
-  channelIDGCN,
-  channelIDGMTB
+  searchArray,
+  channelArray,
 };

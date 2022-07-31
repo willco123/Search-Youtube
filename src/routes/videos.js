@@ -1,11 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const { channelArray, searchArray } = require('../models/searchModel');
+
+// console.log(searchArray)
+// console.log(channelArray)
 
 router.get('/', async (req,res) => {//Returns array
     
     try{
       const [rows] = await db.query("SELECT * from videos");
+      
+        console.log(searchArray)
+        console.log(channelArray)
       return res.status(200).send(rows);
   
     }catch(err){

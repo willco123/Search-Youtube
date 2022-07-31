@@ -1,8 +1,8 @@
 require('dotenv').config()
 const {google} = require('googleapis');
 
-
 const { StoreData } = require('../models/db'); 
+const { searchParams, searchArray, channelArray } = require('../models/searchModel');
 
 const apiKey = process.env.MYAPIKEY;
 const youtube = google.youtube({
@@ -11,9 +11,10 @@ const youtube = google.youtube({
 });
 
 //How then to seperate logic from DB access here?
-        
+//do recursive func here to refactor       
 
-async function GetSearchResults(searchParams){//Connect to youtube api and retrieves searched video titeles/dates and stores in DB
+async function QueryYoutube(searchParams){//Connect to youtube api and retrieves searched video titeles/dates and stores in DB
+  //could perhaps refactor this into re-usuable code, though it does seem very yt specific
   var response = await youtube.search.list(searchParams);
     
   const totalResults = response.data.pageInfo.totalResults;
@@ -46,7 +47,18 @@ async function GetSearchResults(searchParams){//Connect to youtube api and retri
   delete searchParams.pageToken;
 }
 
+async function GetSearchResults(){
+  for (let j in channelArray){
+    searchParams.channeId = j;
+    for (let i in searchArray){
+      searchQuery = 'intitle:"' + searchArray[i] + '"';
+      searchParams.q = searchQuery;
+      await QueryYoutube(searchParams);
+    };
+  };
+}
+
+
 module.exports = {
-  StoreData,
   GetSearchResults  
 }
