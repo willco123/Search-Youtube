@@ -1,7 +1,7 @@
 require('dotenv').config()
 const {google} = require('googleapis');
 
-const { StoreData } = require('../models/db'); 
+const { StoreVideos, StoreChannels } = require('../models/db'); 
 const { searchParams, searchArray, channelArray } = require('../models/searchModel');
 
 const apiKey = process.env.MYAPIKEY;
@@ -10,11 +10,32 @@ const youtube = google.youtube({
   auth: apiKey,
 });
 
-//How then to seperate logic from DB access here?
-//do recursive func here to refactor       
 
-async function QueryYoutube(searchParams){//Connect to youtube api and retrieves searched video titeles/dates and stores in DB
-  //could perhaps refactor this into re-usuable code, though it does seem very yt specific
+
+async function QueryRecur(numberOfPages, response, nextPage){
+
+  const titlesPublishedAt = [];//store data in dict
+  response.data.items.map(item =>{
+    titlesPublishedAt[item.snippet.title] = (item.snippet.publishedAt).substring(0,10);//ignore time just get date
+  })
+  StoreVideos(titlesPublishedAt);
+
+  const channelNames = [];
+  channelNames.push(response.data.items.snippet.channel_name)
+  StoreChannels(channelNames)
+
+  if (numberOfPages > 1){
+    nextPage = response.data.nextPageToken;
+    response = await youtube.search.list(searchParams);
+    numberOfPages = --numberOfPages;
+    return QueryRecur(numberOfPages, response, nextPage)
+  }else{
+    return 
+  }
+}
+
+
+async function QueryYoutube(searchParams){
   var response = await youtube.search.list(searchParams);
     
   const totalResults = response.data.pageInfo.totalResults;
@@ -24,28 +45,11 @@ async function QueryYoutube(searchParams){//Connect to youtube api and retrieves
   var nextPage = response.data.nextPageToken;
 
 
-  const titlesPublishedAt = [];//store data in dict
-  response.data.items.map(item =>{
-    titlesPublishedAt[item.snippet.title] = (item.snippet.publishedAt).substring(0,10);
-  })
-  StoreData(titlesPublishedAt);
-
-
-  for(let i = 1; i < numberOfPages; i++){//Iterate through pages as maxresults = 50
-    searchParams['pageToken'] = nextPage;
-    response = await youtube.search.list(searchParams);
-
-    const titlesPublishedAt = [];
-    response.data.items.map(item =>{ 
-      titlesPublishedAt[item.snippet.title] = (item.snippet.publishedAt).substring(0,10);
-    })
-
-    nextPage = response.data.nextPageToken;
-    StoreData(titlesPublishedAt);
-  }
+  QueryRecur(numberOfPages, response, nextPage)
 
   delete searchParams.pageToken;
 }
+
 
 async function GetSearchResults(){
   for (let j in channelArray){

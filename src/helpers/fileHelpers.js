@@ -1,8 +1,8 @@
 const fs = require('fs');
 
-function ReadFileSync(inputFile) {//Stores search params in array
+function ReadFileSyncByLine(inputFile) {//Stores search params in array
   try {
-    const data = fs.readFile(inputFile, { encoding: 'utf8' }).split("\r\n");
+    const data = fs.readFileSync(inputFile, { encoding: 'utf8' }).split("\r\n");
     return data;
   } catch (err) {
     console.log(err);
@@ -10,5 +10,5 @@ function ReadFileSync(inputFile) {//Stores search params in array
 }
 
 module.exports = {
-  ReadFileSync,
+  ReadFileSyncByLine,
 }

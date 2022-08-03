@@ -1,4 +1,4 @@
-const { ReadFileSync } = require('../helpers/fileHelpers');
+const { ReadFileSyncByLine } = require('../helpers/fileHelpers');
 
 var searchParams = {
   part: 'snippet',
@@ -7,8 +7,8 @@ var searchParams = {
 };
 
 
-const searchArray = await ReadFileSync('search_filter');
-const channelArray = await ReadFileSync('channel_filter');
+const searchArray = ReadFileSyncByLine('search_filter');
+const channelArray = ReadFileSyncByLine('channel_filter');
 
 
 module.exports = {

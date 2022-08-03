@@ -10,9 +10,6 @@ router.get('/', async (req,res) => {//Returns array
     
     try{
       const [rows] = await db.query("SELECT * from videos");
-      
-        console.log(searchArray)
-        console.log(channelArray)
       return res.status(200).send(rows);
   
     }catch(err){
@@ -32,7 +29,7 @@ router.get('/:id', async (req,res) => {//Returns JSON
     }
 });
 
-router.delete('/:id', async (req,res) => {//Deletes item from DB
+router.delete('/:id', async (req,res) => {//Deletes item from DB Change to transaction
   try{
     const id = req.params.id; 
     const deletedItem = await db.query('DELETE FROM videos WHERE id = (?)',[id]);

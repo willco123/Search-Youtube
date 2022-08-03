@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const { GetSearchResults } = require('../services/ytService');
-const { searchParams, searchArray, channelArray } = require('../models/searchModel');
+
 
 
 router.get('/', async (_req, res, next) => {
-  try{ 
+  try{//Could change it so search data is passed through req
     await GetSearchResults()
     res.send('Items stored in DB!');
 
