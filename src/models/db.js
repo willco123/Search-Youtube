@@ -6,7 +6,7 @@ async function StoreVideos(titlesPublishedAt){//Parses each page of data and sto
     await db.query('INSERT INTO VIDEOS(title, date)\
                       VALUES (?,?)', [key, val]);
     } catch(err){
-      next(err);
+      throw(err);
     }
   }
 }
@@ -17,7 +17,7 @@ async function StoreChannels(channelNames){//Parses each page of data and stores
     await db.query('INSERT INTO CHANNELS(channel_name)\
                       VALUES (?)', [channelName]);
     } catch(err){
-      next(err);
+      throw(err);
     }
   }
 }

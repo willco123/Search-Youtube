@@ -2,7 +2,7 @@ require('dotenv').config()
 const {google} = require('googleapis');
 
 const { StoreVideos, StoreChannels } = require('../models/db'); 
-const { searchParams, searchArray, channelArray } = require('../models/searchModel');
+const { searchParams, searchArray } = require('../models/searchModel');
 
 const apiKey = process.env.MYAPIKEY;
 const youtube = google.youtube({
@@ -14,53 +14,71 @@ const youtube = google.youtube({
 
 async function QueryRecur(numberOfPages, response, nextPage){
 
-  const titlesPublishedAt = [];//store data in dict
-  response.data.items.map(item =>{
-    titlesPublishedAt[item.snippet.title] = (item.snippet.publishedAt).substring(0,10);//ignore time just get date
-  })
-  StoreVideos(titlesPublishedAt);
+  try{  
+    const titlesPublishedAt = [];//store data in dict
+    response.data.items.map(item =>{
+      titlesPublishedAt[item.snippet.title] = (item.snippet.publishedAt).substring(0,10);//ignore time just get date
+    })
+    await StoreVideos(titlesPublishedAt);
 
-  const channelNames = [];
-  channelNames.push(response.data.items.snippet.channel_name)
-  StoreChannels(channelNames)
+    // const channelNames = [];
+    // channelNames.push(response.data.items.snippet.channel_name)
+    // StoreChannels(channelNames)
 
-  if (numberOfPages > 1){
-    nextPage = response.data.nextPageToken;
-    response = await youtube.search.list(searchParams);
-    numberOfPages = --numberOfPages;
-    return QueryRecur(numberOfPages, response, nextPage)
-  }else{
-    return 
+    if (numberOfPages > 1){
+      nextPage = response.data.nextPageToken;
+      response = await youtube.search.list(searchParams);
+      await process.nextTick(() => {});
+      numberOfPages = --numberOfPages;
+      return await QueryRecur(numberOfPages, response, nextPage)
+    }else{
+      return 
+    }}
+  catch(err){
+    throw(err)
   }
 }
 
 
 async function QueryYoutube(searchParams){
-  var response = await youtube.search.list(searchParams);
+  try{
+
+    var response = await youtube.search.list(searchParams);
+    await process.nextTick(() => {});
+    console.log(response.items)
     
-  const totalResults = response.data.pageInfo.totalResults;
-  const resultsPerPage = response.data.pageInfo.resultsPerPage;
-  const numberOfPages = Math.floor(totalResults/resultsPerPage);
+    const totalResults = response.data.pageInfo.totalResults;
+    const resultsPerPage = response.data.pageInfo.resultsPerPage;
+    const numberOfPages = Math.floor(totalResults/resultsPerPage);
+  
+    var nextPage = response.data.nextPageToken;
+  
+  
+    await QueryRecur(numberOfPages, response, nextPage)
+  
+    delete searchParams.pageToken;
 
-  var nextPage = response.data.nextPageToken;
+  }catch(err){
+    if (err.code == 403){
+      throw (err)
+    }else{
+      console.log(err.stack)
+    }
+  }
 
-
-  QueryRecur(numberOfPages, response, nextPage)
-
-  delete searchParams.pageToken;
 }
 
 
 async function GetSearchResults(){
-  for (let j in channelArray){
-    searchParams.channeId = j;
-    for (let i in searchArray){
-      searchQuery = 'intitle:"' + searchArray[i] + '"';
-      searchParams.q = searchQuery;
-      await QueryYoutube(searchParams);
-    };
+
+  for (let i in searchArray){
+    searchQuery = 'intitle:"' + searchArray[i] + '"';
+    searchParams.q = searchQuery;
+    await QueryYoutube(searchParams);
   };
-}
+
+};
+
 
 
 module.exports = {

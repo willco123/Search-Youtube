@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-router.get('/', async (req, res)=> {//query date or title
+router.get('/', async (req, res, next)=> {//query date or title
 
   try{//use format /?column=value
 
@@ -11,10 +11,10 @@ router.get('/', async (req, res)=> {//query date or title
       delete item.id;
       return item;
     })
-    res.send(output);
+    return res.status(200).send(output);
 
   }catch(err){
-    console.log(err.stack);
+    next(err.stack);
   }
 })
 

@@ -6,12 +6,16 @@ const { GetSearchResults } = require('../services/ytService');
 
 
 router.get('/', async (_req, res, next) => {
-  try{//Could change it so search data is passed through req
+  try{
     await GetSearchResults()
-    res.send('Items stored in DB!');
+    return res.status(200).send('Items stored in DB!');
 
-  } catch (err){
-    next(err);//add error handling for "exceed api quota"
+  }catch (err){
+    if (err.code == 403){
+      res.status(403).send('Forbidden, Quota exceeded');
+    }else{
+      next(err)
+    }
   }
 })
 

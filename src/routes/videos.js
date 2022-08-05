@@ -1,35 +1,34 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-const { channelArray, searchArray } = require('../models/searchModel');
+
 
 // console.log(searchArray)
 // console.log(channelArray)
 
-router.get('/', async (req,res) => {//Returns array
-    
+router.get('/', async (_req,res,next) => {//Returns array
     try{
       const [rows] = await db.query("SELECT * from videos");
       return res.status(200).send(rows);
-  
+
     }catch(err){
-      console.log(err.stack);
+      next(err);
     }
 });
 
-router.get('/:id', async (req,res) => {//Returns JSON
-
+router.get('/:id', async (req,res,next) => {//Returns JSON
   try{
     const [rows] = await db.query("SELECT * from videos WHERE (id) = (?)", [req.params.id]);
     if (rows.length===0) return res.status(404).send('A video with that given id cannot be found');
     return res.send(rows[0]);
     }
+
     catch(err){
-      console.log(err.stack);
+      next(err);
     }
 });
 
-router.delete('/:id', async (req,res) => {//Deletes item from DB Change to transaction
+router.delete('/:id', async (req,res,next) => {//Deletes item from DB Change to transaction
   try{
     const id = req.params.id; 
     const deletedItem = await db.query('DELETE FROM videos WHERE id = (?)',[id]);
@@ -38,12 +37,11 @@ router.delete('/:id', async (req,res) => {//Deletes item from DB Change to trans
         .send('A video with the given ID was not found');
 
     return res.status(201).send('Record Successfully deleted');
-  }catch(err){
-    console.log(err.stack);
-  }
 
-  
-})
+  }catch(err){
+    next(err);
+  }
+});
 
 
 

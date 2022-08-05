@@ -12,12 +12,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `YTSearchDB` DEFAULT CHARACTER SET utf8 ;
-USE `YTSearchDB` ;
+CREATE SCHEMA IF NOT EXISTS `YTSearchDB_test` DEFAULT CHARACTER SET utf8 ;
+USE `YTSearchDB_test` ;
 -- -----------------------------------------------------
 -- Table `mydb`.`channels`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `YTSearchDB`.`channels` (
+CREATE TABLE IF NOT EXISTS `YTSearchDB_test`.`channels` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `channel_name` VARCHAR(100) NOT NULL UNIQUE,
   PRIMARY KEY (`id`))
@@ -26,7 +26,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`videos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `YTSearchDB`.`videos` (
+CREATE TABLE IF NOT EXISTS `YTSearchDB_test`.`videos` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL, 
   `date` DATETIME NOT NULL,

@@ -3,30 +3,39 @@ const router = express.Router();
 const db = require('../config/db');
 
 
-router.get('/', async (req,res) => {//Get channels
-    const [rows,fields] = await db.query("SELECT * from channels");
-    res.send(rows);
+router.get('/', async (_req,res,next) => {//Get channels
+  try{
+    const [rows] = await db.query("SELECT * from channels");
+    return res.status(200).send(rows);
+
+  }catch(err){
+    next(err);
+  }
 });
 
-router.get('/columns', async (req, res) => {
-    const channelColumns = await db.query('SHOW COLUMNS FROM mydb.channels')
-    res.json(channelColumns[0])
-})
+router.get('/:id', async (req,res, next) => {//Returns JSON
+  try{
+    const [rows] = await db.query("SELECT * from channels WHERE (id) = (?)", [req.params.id]);
+    if (rows.length===0) return res.status(404).send('A channel with that given id cannot be found');
+    return res.send(rows[0]);
+    }
 
-router.post('/', async (req,res) => {
-    var {channel_name} = req.body
-    console.log(channel_name)
-    await db.query('INSERT INTO CHANNELS(channel_name)\
-                      VALUES (?)', [channel_name]);
-
-    res.status(201).send('Channel Successfully added')
+    catch(err){
+      next(err);
+    }
 });
 
-router.delete('/:id', async (req,res) => {
-  var id = req.params.id; 
-  console.log(id)
-  await db.query('DELETE FROM channels WHERE id = ?',[id])
-  res.send('Item deleted')
+router.delete('/:id', async (req,res, next) => {
+  try{
+    var id = req.params.id; 
+    console.log(id)
+    await db.query('DELETE FROM channels WHERE id = ?',[id])
+    res.send('Item deleted')
+
+  }catch(err){
+    next(err);
+  }
+
   
 })
 module.exports = router;
