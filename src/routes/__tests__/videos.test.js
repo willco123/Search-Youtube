@@ -7,9 +7,9 @@ const db = require('../../config/db');
 app = SetUpMockApp();
 app.use('/videos', router);
 
-// beforeAll(async () =>{
-//   await db.query('use ytsearchDB_test')
-// })
+beforeAll(async () =>{
+  await db.query('use ytsearchDB_test')
+})
 
 describe('/videos', () => {
   describe('GET', () => {

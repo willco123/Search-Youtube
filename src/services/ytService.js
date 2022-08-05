@@ -27,8 +27,8 @@ async function QueryRecur(numberOfPages, response, nextPage){
 
     if (numberOfPages > 1){
       nextPage = response.data.nextPageToken;
+      await process.nextTick(() => {});//fixes a jest open handle issue, something to do with axios
       response = await youtube.search.list(searchParams);
-      await process.nextTick(() => {});
       numberOfPages = --numberOfPages;
       return await QueryRecur(numberOfPages, response, nextPage)
     }else{
@@ -43,8 +43,8 @@ async function QueryRecur(numberOfPages, response, nextPage){
 async function QueryYoutube(searchParams){
   try{
 
-    var response = await youtube.search.list(searchParams);
     await process.nextTick(() => {});
+    var response = await youtube.search.list(searchParams);
     console.log(response.items)
     
     const totalResults = response.data.pageInfo.totalResults;

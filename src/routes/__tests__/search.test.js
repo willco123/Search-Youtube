@@ -7,9 +7,10 @@ app = SetUpMockApp();
 app.use('/search', router);
 //jest.useFakeTimers();//Handles ReferenceError 
 
-// beforeAll(async () =>{
-//   await db.query('use ytsearchDB_test')
-// })
+beforeEach(async () =>{
+   await db.query('use ytsearchDB_test')
+  //await process.nextTick(() => {});
+})
 
 describe('/search', () => {
   describe('GET', () => {
