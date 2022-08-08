@@ -1,13 +1,15 @@
-const { ReadFileSyncByLine, ReadFileAsyncByLine } = require('../helpers/fileHelpers');
+const {
+  ReadFileSyncByLine,
+  ReadFileAsyncByLine,
+} = require("../helpers/fileHelpers");
 
 var searchParams = {
-  part: 'snippet',
-  type: 'video',
-  maxResults: 50, 
+  part: "snippet",
+  type: "video",
+  maxResults: 50,
 };
 
-
-const searchArray = ReadFileSyncByLine('search_filter');
+const searchArray = ReadFileSyncByLine("search_filter");
 //const channelArray = ReadFileSyncByLine('channel_filter');
 
 module.exports = {
