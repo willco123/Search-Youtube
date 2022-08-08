@@ -3,18 +3,17 @@ const table = "channels";
 const column = "channel_name";
 
 async function StoreData(dataYT) {
-  //Parses each page of data and stores entries one at a time
-  for (let [title, [date, channelName]] of Object.entries(dataYT)) {
+  for (let { title, date, channelTitle } of dataYT) {
     try {
       let id;
-      let isUnique = await CheckUniqueness(channelName);
+      let isUnique = await CheckUniqueness(channelTitle);
       if (isUnique) {
         id = isUnique;
       } else {
         let result = await db.query(
           "INSERT INTO CHANNELS(channel_name)\
                       VALUES (?)",
-          [channelName]
+          [channelTitle]
         );
         id = result[0].insertId;
       }
@@ -29,12 +28,12 @@ async function StoreData(dataYT) {
   }
 }
 
-async function CheckUniqueness(channelName) {
+async function CheckUniqueness(channelTitle) {
   try {
     selectItem = await db.query("SELECT * from ?? where (??) = (?)", [
       table,
       column,
-      channelName,
+      channelTitle,
     ]);
     isRow = selectItem[0][0];
     if (isRow === undefined) return 0;

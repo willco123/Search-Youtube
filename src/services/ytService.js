@@ -13,14 +13,15 @@ const youtube = google.youtube({
 async function QueryRecur(numberOfPages, response, nextPage) {
   try {
     //if here
-    console.log(response.data.items);
-    const dataYT = []; //store data in dict
-    response.data.items.map((item) => {
-      dataYT[item.snippet.title] = [
-        item.snippet.publishedAt.replace(/T|Z/g, " "),
-        item.snippet.channelTitle,
-      ];
-    });
+
+    const dataYT = [];
+    response.data.items.map((item) =>
+      dataYT.push({
+        title: item.snippet.title,
+        date: item.snippet.publishedAt.replace(/T|Z/g, " "),
+        channelTitle: item.snippet.channelTitle,
+      })
+    );
     await StoreData(dataYT);
 
     if (numberOfPages > 1) {
