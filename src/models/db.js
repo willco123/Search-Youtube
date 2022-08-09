@@ -3,7 +3,9 @@ const table = "channels";
 const column = "channel_name";
 
 async function StoreData(dataYT) {
-  for (let { title, date, channelTitle } of dataYT) {
+  for (let index in dataYT) {
+    //jest doesn't like for of here
+    let { title, date, channelTitle } = dataYT[index];
     try {
       let id;
       let isUnique = await CheckUniqueness(channelTitle);

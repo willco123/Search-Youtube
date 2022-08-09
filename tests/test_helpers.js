@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const { StoreData } = require("../src/models/db");
-//const db = require("../src/config/db");
+const db = require("../src/config/db");
 
 function SetUpMockApp() {
   const app = express();
@@ -14,47 +14,57 @@ function CreateMockData() {
     mockData1: {
       title: "Title One",
       date: new Date("2022-01-01"),
-      channel_name: "Channel One",
+      channelTitle: "Channel One",
     },
     mockData2: {
       title: "Title Two",
       date: new Date("2022-02-02"),
-      channel_name: "Channel Two",
+      channelTitle: "Channel Two",
     },
     mockData3: {
       title: "Title Three",
       date: new Date("2022-03-03"),
-      channel_name: "Channel Three",
+      channelTitle: "Channel Three",
     },
   };
 
   return mockData;
 }
 
-function CreateMockData2() {
-  let mockData = [];
-
-  mockData["Title One"] = [
-    new Date("2022-01-01".substring(0, 10)),
-    "Channel One",
-  ];
-  mockData["Title Two"] = [new Date("2022-02-02"), "Channel Two"];
-  mockData["Title Three"] = [new Date("2022-03-03"), "Channel Three"];
-
-  return mockData;
+async function ClearDB() {
+  await db.query("delete from videos;");
+  await db.query("delete from channels;");
 }
 
-async function PopulateDB(mockData) {
-  let { title, date, channel_name } = mockData;
-
-  await StoreData();
+async function GetFirstVideo() {
+  items = await db.query("Select * from videos;");
+  firstItemID = items[0][0].id;
+  return firstItemID;
 }
 
-myData = CreateMockData();
-myOtherData = CreateMockData2();
-console.log(myData);
-console.log(myOtherData);
+async function GetFirstChannel() {
+  items = await db.query("Select * from channels;");
+  firstItemID = items[0][0].id;
+  return firstItemID;
+}
+
+async function GetAllChannels() {
+  items = await db.query("select * from channels;");
+  return items[0];
+}
+
+async function GetAllVideos() {
+  items = await db.query("select * from videos;");
+  return items[0];
+}
 
 module.exports = {
   SetUpMockApp,
+  CreateMockData,
+  ClearDB,
+  StoreData,
+  GetFirstVideo,
+  GetFirstChannel,
+  GetAllChannels,
+  GetAllVideos,
 };

@@ -1,13 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const { SearchVideos } = require("../helpers/IsSearchRequest");
 
-router.get("/", async (_req, res, next) => {
-  //Returns array
+router.get("/", async (req, res, next) => {
   try {
-    const [rows] = await db.query("SELECT * from videos");
-    return res.status(200).send(rows);
+    query = req.query;
+    var output;
+    console.log(Object.values(query).length);
+    if (Object.keys(query).length != 0 || Object.values(query).length != 0) {
+      output = await SearchVideos(query);
+    } else {
+      [output] = await db.query("SELECT * from videos");
+    }
+    return res.status(200).send(output);
   } catch (err) {
+    if (err.code === "ER_BAD_FIELD_ERROR")
+      return res.status(404).send("Incorrect column name");
     next(err);
   }
 });
