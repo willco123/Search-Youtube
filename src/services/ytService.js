@@ -2,7 +2,7 @@ require("dotenv").config();
 const { google } = require("googleapis");
 
 const { StoreData } = require("../models/db");
-const { searchParams, searchArray } = require("../models/searchModel");
+const { searchParams, searchArray } = require("../utils/searchModel");
 
 const apiKey = process.env.MYAPIKEY;
 const youtube = google.youtube({

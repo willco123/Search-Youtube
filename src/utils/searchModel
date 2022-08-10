@@ -1,7 +1,4 @@
-const {
-  ReadFileSyncByLine,
-  ReadFileAsyncByLine,
-} = require("../helpers/fileHelpers");
+const { ReadFileSyncByLine, ReadFileAsyncByLine } = require("./fileHelpers");
 
 var searchParams = {
   part: "snippet",

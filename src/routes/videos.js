@@ -1,17 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
-const { SearchVideos } = require("../helpers/IsSearchRequest");
+const {
+  GetAllFromTable,
+  GetItemByIDFromTable,
+  DeleteItemByIDFromTable,
+} = require("../models/db");
+const { SearchVideos } = require("../utils/IsSearchRequest");
+const CheckForQuery = require("../utils/CheckForQuery");
 
 router.get("/", async (req, res, next) => {
   try {
-    query = req.query;
-    var output;
-    console.log(Object.values(query).length);
-    if (Object.keys(query).length != 0 || Object.values(query).length != 0) {
+    const query = req.query;
+
+    const isQuery = CheckForQuery(query);
+
+    let output;
+
+    if (isQuery) {
       output = await SearchVideos(query);
     } else {
-      [output] = await db.query("SELECT * from videos");
+      output = await GetAllFromTable("videos");
     }
     return res.status(200).send(output);
   } catch (err) {
@@ -22,14 +30,12 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:id", async (req, res, next) => {
-  //Returns JSON
   try {
-    const [rows] = await db.query("SELECT * from videos WHERE (id) = (?)", [
-      req.params.id,
-    ]);
-    if (rows.length === 0)
+    const id = req.params.id;
+    const item = await GetItemByIDFromTable("videos", id); //check [] move if to db
+    if (item === 0)
       return res.status(404).send("A video with that given id cannot be found");
-    return res.status(200).send(rows[0]);
+    return res.status(200).send(item);
   } catch (err) {
     next(err);
   }
@@ -38,10 +44,8 @@ router.get("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const deletedItem = await db.query("DELETE FROM videos WHERE id = (?)", [
-      id,
-    ]);
-    if (deletedItem[0].affectedRows === 0)
+    const deletedItem = await DeleteItemByIDFromTable("videos", id);
+    if (deletedItem === 0)
       return res.status(404).send("A video with the given ID was not found");
 
     return res.status(200).send("Record Successfully deleted");

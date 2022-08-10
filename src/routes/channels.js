@@ -1,16 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
-const { SearchChannels } = require("../helpers/IsSearchRequest");
+const {
+  GetAllFromTable,
+  GetItemByIDFromTable,
+  DeleteItemByIDFromTable,
+} = require("../models/db");
+const { SearchChannels } = require("../utils/IsSearchRequest");
+const CheckForQuery = require("../utils/CheckForQuery");
 
 router.get("/", async (req, res, next) => {
   try {
     query = req.query;
     var output;
-    if (Object.keys(query).length != 0) {
+    const isQuery =
+      Object.keys(query).length != 0 || Object.values(query).length != 0;
+
+    if (isQuery) {
       output = await SearchChannels(query);
     } else {
-      [output] = await db.query("SELECT * from channels");
+      output = await GetAllFromTable("channels");
     }
     return res.status(200).send(output);
   } catch (err) {
@@ -23,14 +31,13 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   //Returns JSON
   try {
-    const [rows] = await db.query("SELECT * from channels WHERE (id) = (?)", [
-      req.params.id,
-    ]);
-    if (rows.length === 0)
+    const id = req.params.id;
+    const item = await GetItemByIDFromTable("channels", id);
+    if (item === 0)
       return res
         .status(404)
         .send("A channel with that given id cannot be found");
-    return res.status(200).send(rows[0]);
+    return res.status(200).send(item);
   } catch (err) {
     next(err);
   }
@@ -39,10 +46,8 @@ router.get("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const deletedItem = await db.query("DELETE FROM channels WHERE id = (?)", [
-      id,
-    ]);
-    if (deletedItem[0].affectedRows === 0)
+    const deletedItem = await DeleteItemByIDFromTable("channels", id);
+    if (deletedItem === 0)
       return res.status(404).send("A channel with the given ID was not found");
 
     return res.status(200).send("Record Successfully deleted");
