@@ -4,16 +4,17 @@ const {
   ClearDB,
   StoreData,
   GetFirstVideo,
+  UseTestDB,
+  EndDB,
 } = require("../../../tests/test_helpers");
 const supertest = require("supertest");
 const router = require("../videos");
-const db = require("../../config/db");
 
 app = SetUpMockApp();
 app.use("/videos", router);
 
 beforeAll(async () => {
-  await db.query("use ytsearchDB_test");
+  await UseTestDB();
 });
 
 mockUsers = CreateMockData();
@@ -29,6 +30,30 @@ describe("/videos", () => {
       const response = await supertest(app).get("/videos");
       expect(response.status).toBe(200);
       expect(response.type).toEqual("application/json");
+    });
+  });
+
+  describe("GET Query", () => {
+    it("Should specific Item and associated channel", async () => {
+      const response = await supertest(app).get("/videos/?title=Title One");
+      expect(response.status).toBe(200);
+
+      expect(response.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: "Title One",
+            Channel: "Channel One",
+          }),
+        ])
+      );
+      expect(response.type).toEqual("application/json");
+    });
+  });
+
+  describe("GET Query", () => {
+    it("Should return 404", async () => {
+      const response = await supertest(app).get("/videos/?badtitle=Title One");
+      expect(response.status).toBe(404);
     });
   });
 
@@ -65,9 +90,5 @@ describe("/videos", () => {
 });
 
 afterAll(async () => {
-  await db.end();
+  await EndDB();
 });
-
-//BeforeEach populate DB
-//afterEach Remove all
-//Do this for videos/channels/searchDB

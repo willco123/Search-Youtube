@@ -58,6 +58,14 @@ async function GetAllVideos() {
   return items[0];
 }
 
+async function UseTestDB() {
+  await db.query("use ytsearchDB_test");
+}
+
+async function EndDB() {
+  await await db.end();
+}
+
 module.exports = {
   SetUpMockApp,
   CreateMockData,
@@ -67,4 +75,10 @@ module.exports = {
   GetFirstChannel,
   GetAllChannels,
   GetAllVideos,
+  UseTestDB,
+  EndDB,
 };
+
+//Test multi-pages & multi videos to a single channel
+//Test FAILED YT Connection, bad API key
+//Test duplicate channel entry

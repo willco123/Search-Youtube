@@ -5,7 +5,7 @@ const {
   GetItemByIDFromTable,
   DeleteItemByIDFromTable,
 } = require("../models/db");
-const { SearchVideos } = require("../utils/IsSearchRequest");
+const { SearchVideos } = require("../services/SearchRequest");
 const CheckForQuery = require("../utils/CheckForQuery");
 
 router.get("/", async (req, res, next) => {
@@ -32,7 +32,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const item = await GetItemByIDFromTable("videos", id); //check [] move if to db
+    const item = await GetItemByIDFromTable("videos", id);
     if (item === 0)
       return res.status(404).send("A video with that given id cannot be found");
     return res.status(200).send(item);

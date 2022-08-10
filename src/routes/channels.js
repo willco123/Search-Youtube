@@ -5,15 +5,14 @@ const {
   GetItemByIDFromTable,
   DeleteItemByIDFromTable,
 } = require("../models/db");
-const { SearchChannels } = require("../utils/IsSearchRequest");
+const { SearchChannels } = require("../services/SearchRequest");
 const CheckForQuery = require("../utils/CheckForQuery");
 
 router.get("/", async (req, res, next) => {
   try {
     query = req.query;
     var output;
-    const isQuery =
-      Object.keys(query).length != 0 || Object.values(query).length != 0;
+    const isQuery = CheckForQuery(query);
 
     if (isQuery) {
       output = await SearchChannels(query);

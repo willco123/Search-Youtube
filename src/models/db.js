@@ -1,4 +1,4 @@
-const db = require("../config/db"); // should be only place to require this (except for test helpers & app.js)
+const db = require("../config/db");
 const table = "channels";
 const column = "channel_name";
 

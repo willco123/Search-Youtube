@@ -1,6 +1,5 @@
 const {
   SearchDBFromTable,
-  GetVideosWithFK,
   GetParentItemsByFK,
   GetChildItemsWithFK,
 } = require("../models/db");

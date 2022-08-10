@@ -6,17 +6,17 @@ const {
   GetFirstChannel,
   GetAllChannels,
   GetAllVideos,
+  UseTestDB,
+  EndDB,
 } = require("../../../tests/test_helpers");
 const supertest = require("supertest");
 const router = require("../channels");
-const db = require("../../config/db");
-const promisePool = require("../../config/db");
 
 app = SetUpMockApp();
 app.use("/channels", router);
 
 beforeAll(async () => {
-  await db.query("use ytsearchDB_test");
+  await UseTestDB();
 });
 
 mockUsers = CreateMockData();
@@ -43,6 +43,34 @@ describe("/channels", () => {
     });
   });
 
+  describe("GET Query", () => {
+    it("Should find specific Item and associated video", async () => {
+      const response = await supertest(app).get(
+        "/channels/?channel_name=Channel One"
+      );
+      expect(response.status).toBe(200);
+
+      expect(response.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            channel_name: "Channel One",
+            Videos: ["Title One"], // could do aray containing here for channels with lots of values
+          }),
+        ])
+      );
+      expect(response.type).toEqual("application/json");
+    });
+  });
+
+  describe("GET Query", () => {
+    it("Should return 404", async () => {
+      const response = await supertest(app).get(
+        "/channels/?badchannel_name=Channel One"
+      );
+      expect(response.status).toBe(404);
+    });
+  });
+
   describe("GET ID", () => {
     it("Should return 404", async () => {
       const response = await supertest(app).get("/channels/" + 1);
@@ -66,7 +94,6 @@ describe("/channels", () => {
   });
 });
 
-//Need to test fail cases now
 afterAll(async () => {
-  await db.end();
+  await EndDB();
 });
