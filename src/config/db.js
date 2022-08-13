@@ -14,7 +14,7 @@ const pool = mysql.createPool({
 });
 
 const promisePool = pool.promise();
-
+//do ternary
 async function CreateSchema(SQLSchema) {
   try {
     if (process.env.NODE_ENV === "test") {

@@ -1,4 +1,5 @@
 require("iconv-lite").encodingExists("foo"); //Handles mysql2 encoding error
+
 const {
   SetUpMockApp,
   UseTestDB,
