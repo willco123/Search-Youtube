@@ -1,6 +1,6 @@
 # Search Youtube
 
-## Search for youtube videos titles and store the videos and associated channel in a database!
+## Search for youtube videos and store the titles and associated channel names in a database!
 
 Add a .env file to the root of the project that contains:
 MYSQL_HOST='Your db host'
