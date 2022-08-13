@@ -3,10 +3,10 @@
 ## Search for youtube videos and store the titles and associated channel names in a database!
 
 Add a .env file to the root of the project that contains:
-MYSQL_HOST='Your db host'
-MYSQL_USER='Your db username'
-MYSQL_PASSWORD='Your db password'
-PORT='Your port'
+MYSQL_HOST='Your db host'  
+MYSQL_USER='Your db username'  
+MYSQL_PASSWORD='Your db password'  
+PORT='Your port'  
 MYAPIKEY='Your Youtube Data Api V3 Key'
 
 The project requires an instance of MYSQL, the user needs to have privileges to create and modify a database.
