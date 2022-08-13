@@ -2,7 +2,7 @@
 
 ## Search for youtube videos and store the titles and associated channel names in a database!
 
-Add a .env file to the root of the project that contains:
+Add a .env file to the root of the project that contains:  
 MYSQL_HOST='Your db host'  
 MYSQL_USER='Your db username'  
 MYSQL_PASSWORD='Your db password'  
@@ -31,18 +31,18 @@ Calling a get request to this endpoint will retrieve all the channels in the dat
 ## Search for specific items
 
 Navigating to the channels or videos endpoint and appending a query in the format ?column=value, will allow you to search for specific items.
-Accepted column names are equivalent to those named in the database and are as follows:
-Videos:
-id
-title
-date
+Accepted column names are equivalent to those named in the database and are as follows:  
+Videos:  
+id  
+title  
+date  
 channel_id
 
-Channels:
-id
+Channels:  
+id  
 channel_name
 
-Examples:
-/videos/1 Will return the the video with an "id" of 1
-/videos/?title=lucid Would return all videos with "lucid" in the title
+Examples:  
+/videos/1 Will return the the video with an "id" of 1  
+/videos/?title=lucid Would return all videos with "lucid" in the title  
 /channels/?channel_name=mellow Would return all channels named mellow
